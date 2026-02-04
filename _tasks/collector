@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. $PWD/_tasks/des_ops
+
+collectTAP(){
+	killDES;sleep 5
+	while IFS=, read ip str rdir cfgdir engine
+	do
+		ssh root@$ip "screen -d -m sh ./encry_msgdwn.sh & disown"
+	done<_path/server.csv
+}

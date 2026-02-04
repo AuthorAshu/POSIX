@@ -1,0 +1,15 @@
+#!/bin/sh
+
+URI1=https://www.bseindia.com/downloads1/Live_Masters_for_Equity_Derivatives.zip
+fylA=BSE_EQD_CONTRACT
+fylB=EQD_DP
+
+syncMasters(){
+	curl -A 'Firefox/5.0' -o _bseMasters/Masters_EQD.zip $URI1 ;unzip _bseMasters/Masters_EQD.zip -d _bseMasters
+}
+uploads(){
+	syncMasters
+	scp -r $PWD/_bseMasters/$fylA_$(date -d "yesterday" '+%d%m%Y').csv root@$s1:/root/BSE/Config/bseFo/$fylA.csv
+	scp -r $PWD/_bseMasters/$fylB_$(date -d "yesterday" '+%d%m%Y') root@$s1:/root/BSE/Config/bseFo/$fylB
+}
+syncMasters

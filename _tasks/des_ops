@@ -1,0 +1,36 @@
+#!/bin/sh
+
+. $PWD/_tasks/https
+
+
+
+initDES(){
+#	distribute
+	killDES
+	while IFS=, read ip str rdir cfgdir engine
+	do
+		if [[ $str = BOX ]]
+		then
+			ssh -n root@$ip "cd $rdir;screen -m -d exasock ./$engine & disown"
+		elif [[ $str = CR ]]
+		then
+			ssh -n root@$ip "cd $rdir;screen -m -d exasock ./$engine & disown"
+		else
+			continue
+		fi
+	done<_path/server.csv
+}
+killDES(){
+	while IFS=, read ip str rdir cfgdir engine
+	do
+		if [[ $str = BOX ]]
+		then
+			ssh -n root@$ip "screen -d -m kill $(ps aux | grep $engine | awk '{print $2}') & disown"
+		elif [[ $str = CR ]]
+		then
+			ssh -n root@$ip "screen -d -m kill $(ps aux | grep $engine | awk '{print $2}') & disown"
+		else
+			continue
+		fi
+	done<_path/server.csv
+}

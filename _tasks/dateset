@@ -1,0 +1,30 @@
+#!/bin/sh
+
+execDate(){
+	func=$(date '+%H')
+	hold=$(date '+%u')
+	if [[ $hold = "7" ]] || [[ $hold = "6" ]]
+	then
+		execYmd=$(date --date="monday" '+%Y%m%d')
+	elif [[ $hold -eq "5" ]] && [[ $func -ge "12" ]]
+	then
+		execYmd=$(date --date="monday" '+%Y%m%d')
+	elif [[ $hold -eq "5" ]] && [[ $func -lt "12" ]]
+	then
+		execYmd=$(date --date="today" '+%Y%m%d')
+	elif [[ $func -ge "12" ]]
+	then
+		execYmd=$(date -d "tomorrow" '+%Y%m%d')
+	elif [[ $func -lt "12" ]]
+	then
+		execYmd=$(date --date="today" '+%Y%m%d')
+	else
+		echo sorry
+	fi
+}
+trimDate(){
+	execDate
+	echo $execYmd
+	execdmY=$(date --date=$execYmd "+%d%m%Y")
+	echo $execdmY
+}

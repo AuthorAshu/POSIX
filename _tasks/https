@@ -1,0 +1,36 @@
+#!/bin/sh
+
+. $PWD/_tasks/dateset
+
+site(){ 
+	trimDate
+	# URL's Variables
+	uri1=https://nsearchives.nseindia.com/archives/nsccl/span/nsccl.$execYmd.i1.zip
+	uri2=https://nsearchives.nseindia.com/archives/exp_lim/ael_$execdmY.csv
+	uri3=https://nsearchives.nseindia.com/archives/fo/sec_ban/fo_secban_$execdmY.csv
+	echo $uri1
+	curl -A 'Firefox/5.0' -o _nseMasters/nsccl.zip $uri1
+	unzip _nseMasters/nsccl.zip -d _nseMasters/; mv _nseMasters/nsccl.xml _nseMasters/nsccl_$(date '+%Y%m%d').xml; rm -rf _nseMasters/nsccl*.zip; mv _nseMasters/nsccl*.spn _nseMasters/nsccl.xml
+	echo $uri2 ;curl -A 'Firefox/5.0' -o _nseMasters/FOExposureLimit.csv $uri2
+	echo $uri3 ;curl -A 'Firefox/5.0' -o _nseMasters/fo_secban.csv $uri3
+}
+
+distribute(){
+	site
+	while IFS=, read ip str rdir cfgdir engine;do
+	echo $ip
+	export SSHPASS=config@1962
+		# PATH's Variables
+		if [[ $str = "CR" ]]
+		then
+			sshpass -e scp -r _nseMasters/* root@$ip:$rdir/$cfgdir ; echo "file copy done at $cr on $ip" 
+			continue
+		elif [[ $str = "BOX" ]]
+		then
+			sshpass -e scp -r _nseMasters/FoExposureLimit.csv root@$ip:$rdir/$cfgdir/FOExpMargin.csv
+			sshpass -e scp -r _nseMasters/nsccl.xml root@$ip:$rdir/$cfgdir
+		else
+			continue
+		fi
+	done<_path/server.csv
+}
