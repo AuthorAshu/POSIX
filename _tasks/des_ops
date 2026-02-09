@@ -9,10 +9,10 @@ initDES(){
 	killDES
 	while IFS=, read ip str rdir cfgdir engine
 	do
-		if [[ $str = BOX ]]
+		if [[ $str = 4leg ]]
 		then
 			ssh -n root@$ip "cd $rdir;screen -m -d exasock ./$engine & disown"
-		elif [[ $str = CR ]]
+		elif [[ $str = 3leg ]]
 		then
 			ssh -n root@$ip "cd $rdir;screen -m -d exasock ./$engine & disown"
 		else
@@ -23,10 +23,10 @@ initDES(){
 killDES(){
 	while IFS=, read ip str rdir cfgdir engine
 	do
-		if [[ $str = BOX ]]
+		if [[ $str = 4leg ]]
 		then
 			ssh -n root@$ip "screen -d -m kill $(ps aux | grep $engine | awk '{print $2}') & disown"
-		elif [[ $str = CR ]]
+		elif [[ $str = 3leg ]]
 		then
 			ssh -n root@$ip "screen -d -m kill $(ps aux | grep $engine | awk '{print $2}') & disown"
 		else

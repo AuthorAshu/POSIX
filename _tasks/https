@@ -21,11 +21,11 @@ distribute(){
 	echo $ip
 	export SSHPASS=config@1962
 		# PATH's Variables
-		if [[ $str = "CR" ]]
+		if [[ $str = "3leg" ]]
 		then
 			sshpass -e scp -r _nseMasters/* root@$ip:$rdir/$cfgdir ; echo "file copy done at $cr on $ip" 
 			continue
-		elif [[ $str = "BOX" ]]
+		elif [[ $str = "4leg" ]]
 		then
 			sshpass -e scp -r _nseMasters/FoExposureLimit.csv root@$ip:$rdir/$cfgdir/FOExpMargin.csv
 			sshpass -e scp -r _nseMasters/nsccl.xml root@$ip:$rdir/$cfgdir
